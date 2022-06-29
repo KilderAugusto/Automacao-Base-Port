@@ -134,28 +134,118 @@ class selenium:
             list = ['Inativo']
             saida['Status Base Port']['Estado da Rede Wi-Fi']['Status'] = list[0]
 
-        # estado do repetidor
-        estado_repetidor = driver.find_element(by=By.XPATH, value='/html/body/div[9]/div[2]/div[4]/div[2]/div[2]').text
-        list = estado_repetidor.split('\n')
-        #print(list)
-        saida['Status Base Port']['Estado da Rede Wi-Fi']['Estado do Repetidor'] = list[0]
-        print(json.dumps(saida['Status Base Port']['Estado da Rede Wi-Fi']))
+        time.sleep(2)
+        #tratando ERROr caso a basep port seja automatizada via cabo ETH
+        try:
+            nome_wifi = driver.find_element(by=By.XPATH, value='/html/body/div[9]/div[2]/div[4]/div[2]/div[2]/input').get_attribute("value")
+            list = nome_wifi.split('\n')
+            print(list)
 
-        sleep(3)
-        associado_wifi = driver.find_element(by=By.XPATH, value='/html/body/div[9]/div[2]/div[4]/div[3]/div[1]/div[2]').text
-        div = associado_wifi.split()
-        print(div)
-        saida['Status Base Port']['Associado a rede wifi']['SSID'] = div[6]
-        saida['Status Base Port']['Associado a rede wifi']['Canal'] = div[7]
-        saida['Status Base Port']['Associado a rede wifi']['RSSI'] = div[8]
-        saida['Status Base Port']['Associado a rede wifi']['Tipo de Segurança'] = div[9]
-        print(json.dumps(saida['Status Base Port']['Associado a rede wifi']))
+            ocultarWifi = driver.find_element(by=By.XPATH, value='/html/body/div[9]/div[2]/div[4]/div[3]/div[2]/input').is_selected()
+            print(ocultarWifi)
+            if ocultarWifi == True:
+                list = ['Sim']
+                saida['Status Base Port']['Ocultar nome da rede Wi-Fi']['Sim ou Nao'] = list[0]
+            else:
+                list = ['Nao']
+                saida['Status Base Port']['Ocultar nome da rede Wi-Fi']['Sim ou Nao'] = list[0]
+                print(json.dumps(saida['Status Base Port']['Ocultar nome da rede Wi-Fi']))
 
-        modo_repetidor = driver.find_element(by=By.XPATH, value='/html/body/div[9]/div[2]/div[4]/div[4]').text
-        div = modo_repetidor.split('\n')
-        print(div)
-        saida['Status Base Port']['Associado a rede wifi']['Modo Repetidor Status Wi-Fi 5GHz'] = div[1]
-        print(json.dumps(saida['Status Base Port']['Associado a rede wifi']))
+
+        except Exception:
+            print('#' * 35)
+            print('##AUTOMATIZANDO INTERFACE GRÁFICA##')
+            print('#' * 35)
+
+        time.sleep(3)
+
+        try:
+            senhawifi5 = driver.find_element(by=By.XPATH, value='/html/body/div[9]/div[2]/div[4]/div[4]/div[2]/div/input').get_attribute("value")
+            div_senha = senhawifi5.split('\n')
+            print(div_senha)
+            saida['Status Base Port']['senha']['Senha Wifi5'] = div_senha[0]
+            print(json.dumps(saida['Status Base Port']['senha']))
+            sleep(3)
+
+
+        except Exception:
+            print('CARREGANDO.....')
+
+        try:
+            # capture level wifi5
+            nivel = driver.find_element(by=By.XPATH, value='/html/body/div[9]/div[2]/div[4]/div[5]/div[2]/div/span').text
+            div_nivel = nivel.split('\n')
+            print(div_nivel)
+            saida['Status Base Port']['Nivel de Seguranca da Senha']['Nivel'] = div_nivel[1]
+            print(json.dumps(saida['Status Base Port']['Nivel de Seguranca da Senha']))
+        except Exception:
+            time.sleep(5)
+            print('OBTENDO INFORMAÇÕES.........')
+        try:
+            # capture type cryptography
+            tipo_criptografia = driver.find_element(by=By.ID, value='selAuth5g')
+            select_object = Select(tipo_criptografia)
+            valor_selecionado = select_object.first_selected_option.text
+            lista = valor_selecionado.split('\n')
+            print(list)
+            saida['Status Base Port']['Criptografia']['Tipo de Criptografia'] = lista[0].strip()
+            print(json.dumps(saida['Status Base Port']['Criptografia']))
+
+            # encryption
+            encriptacao = driver.find_element(by=By.ID, value='selEnc5g')
+            select_object = Select(encriptacao)
+            value_selected = select_object.first_selected_option.text
+            div = value_selected.split('\n')
+            print(div)
+            saida['Status Base Port']['Status de Encriptação']['Encriptação'] = div[0].strip()
+            print(json.dumps(saida['Status Base Port']['Status de Encriptação']))
+
+            # number channel
+            numero_canal = driver.find_element(by=By.ID, value='selCh5g')
+            select_object = Select(numero_canal)
+            value_select = select_object.first_selected_option.text
+            div = value_select.split('\n')
+            print(div)
+            saida['Status Base Port']['Canal']['Número de canal wifi'] = div[0]
+            print(json.dumps(saida['Status Base Port']['Canal']))
+
+            # current channel
+            canal_atual = driver.find_element(by=By.ID, value='spnChCurr5g').text
+            list = canal_atual.split('\n')
+            print(list)
+            saida['Status Base Port']['Canal']['Canal atual'] = list[0]
+            print(json.dumps(saida['Status Base Port']['Canal']))
+        except Exception:
+            time.sleep(5)
+            print('CAPTURANDO DADOS..................')
+            time.sleep(5)
+
+        try:
+            # estado do repetidor
+            estado_repetidor = driver.find_element(by=By.XPATH, value='/html/body/div[9]/div[2]/div[4]/div[2]/div[2]').text
+            list = estado_repetidor.split('\n')
+            print(list)
+            saida['Status Base Port']['Estado da Rede Wi-Fi']['Estado do Repetidor'] = list[0]
+            print(json.dumps(saida['Status Base Port']['Estado da Rede Wi-Fi']))
+
+            sleep(3)
+            associado_wifi = driver.find_element(by=By.XPATH, value='/html/body/div[9]/div[2]/div[4]/div[3]/div[1]/div[2]').text
+            div = associado_wifi.split()
+            print(div)
+            saida['Status Base Port']['Associado a rede wifi']['SSID'] = div[6]
+            saida['Status Base Port']['Associado a rede wifi']['Canal'] = div[7]
+            saida['Status Base Port']['Associado a rede wifi']['RSSI'] = div[8]
+            saida['Status Base Port']['Associado a rede wifi']['Tipo de Segurança'] = div[9]
+            print(json.dumps(saida['Status Base Port']['Associado a rede wifi']))
+
+            modo_repetidor = driver.find_element(by=By.XPATH, value='/html/body/div[9]/div[2]/div[4]/div[4]').text
+            div = modo_repetidor.split('\n')
+            print(div)
+            saida['Status Base Port']['Associado a rede wifi']['Modo Repetidor Status Wi-Fi 5GHz'] = div[1]
+            print(json.dumps(saida['Status Base Port']['Associado a rede wifi']))
+
+        except Exception:
+            print('OBTENDO INFORMAÇÕES........')
 
 
     def capturaWifi(self):
@@ -173,7 +263,7 @@ class selenium:
             list = ['Inativo']
             saida['Status Base Port']['Estado da Rede Wifi']['status'] = list[0]
         #print(json.dumps(saida['Status Base Port']['Estado da Rede Wifi']))
-
+        time.sleep(2)
         nome_wifi = driver.find_element(by=By.XPATH, value='/html/body/div[9]/div[2]/div[4]/div[2]/div[2]/input').get_attribute("value")
         div = nome_wifi.split('\n')
         #print(div)
@@ -344,18 +434,18 @@ class selenium:
         ssid0 = driver.find_element(by=By.ID, value='txtSsid_0').get_attribute("value")
         list_ssid0 = ssid0.split('\n')
         #print(list_ssid0)
-        sleep(2)
+        sleep(3)
         ssid1 = driver.find_element(by=By.ID, value='txtSsid_1').get_attribute("value")
         list_ssid1 = ssid1.split('\n')
         #print(list_ssid1)
-        sleep(2)
+        sleep(3)
         ssid2 = driver.find_element(by=By.ID, value='txtSsid_2').get_attribute("value")
         list_ssid2 = ssid2.split('\n')
         #print(list_ssid2)
-        sleep(2)
+        sleep(3)
         ssid3 = driver.find_element(by=By.ID, value='txtSsid_3').get_attribute("value")
         list_ssid3 = ssid3.split('\n')
-        sleep(2)
+        sleep(3)
         saida['Status Base Port']['Configuração Avançada']['Wifi5']['SSID0'] = list_ssid0[0]
         saida['Status Base Port']['Configuração Avançada']['Wifi5']['SSID1'] = list_ssid1[0]
         saida['Status Base Port']['Configuração Avançada']['Wifi5']['SSID2'] = list_ssid2[0]
@@ -371,16 +461,16 @@ class selenium:
 
         ssid = driver.find_element(by=By.ID, value='txtSsid_0').get_attribute("value")
         div = ssid.split('\n')
-        sleep(2)
+        sleep(3)
         ssid1 = driver.find_element(by=By.ID, value='txtSsid_1').get_attribute("value")
         div1 = ssid1.split('\n')
-        sleep(2)
+        sleep(3)
         ssid2 = driver.find_element(by=By.ID, value='txtSsid_2').get_attribute("value")
         div2 = ssid2.split('\n')
-        sleep(2)
+        sleep(3)
         ssid3 = driver.find_element(by=By.ID, value='txtSsid_3').get_attribute("value")
         div3 = ssid3.split('\n')
-        sleep(2)
+        sleep(3)
         saida['Status Base Port']['Configuração Avançada']['Wifi2']['SSID'] = div[0]
         saida['Status Base Port']['Configuração Avançada']['Wifi2']['SSID1'] = div1[0]
         saida['Status Base Port']['Configuração Avançada']['Wifi2']['SSID2'] = div2[0]

@@ -5,11 +5,11 @@
       "Estado do Repetidor": "Associado"
     },
     "Associado a rede wifi": {
-      "SSID": "Tatooine",
-      "Canal": "104",
-      "RSSI": "-55",
+      "SSID": "VIVOFIBRA-D0C0-5G",
+      "Canal": "153",
+      "RSSI": "-43",
       "Tipo de Segurança": "WPA2-PSK",
-      "Modo Repetidor Status Wi-Fi 5GHz": "Habilitado (QHOP)"
+      "Modo Repetidor Status Wi-Fi 5GHz": "Desabilitado"
     },
     "Estado da Rede Wifi": {
       "status": "Inativo"
@@ -55,12 +55,12 @@
       ],
       "Informações Wi-Fi 5GHz": [
         "Status Wi-Fi: Ativo",
-        "Nome da rede (SSID): Tatooine",
-        "Modo: Repetidor",
+        "Nome da rede (SSID): VIVOFIBRA-D0C0-5G",
+        "Modo: Estação",
         "Esconder SSID: Não",
         "Autenticação: WPA2-PSK",
         "Encriptação: AES",
-        "Canal Atual: 104"
+        "Canal Atual: 153"
       ],
       "Informações da LAN": [
         "Endereço IP: 192.168.15.190",
@@ -86,14 +86,14 @@
     },
     "Configuração Avançada": {
       "Wifi5": {
-        "SSID0": "Tatooine",
-        "SSID1": "Naboo",
+        "SSID0": "",
+        "SSID1": "",
         "SSID2": "",
         "SSID3": ""
       },
       "Wifi2": {
         "SSID": "VIVOFIBRA-3692",
-        "SSID1": "Naboo",
+        "SSID1": "Tatooine",
         "SSID2": "VIVOFIBRA-3692_2",
         "SSID3": "VIVOFIBRA-3692_3"
       }
